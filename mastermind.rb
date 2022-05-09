@@ -1,10 +1,13 @@
 # frozen_string_literal: false
 
+# Board game
 class Board
   attr_accessor :red, :green, :blue, :yelow,
-                :orange, :purple
+                :orange, :purple, :white, :gray
 
-  def initialize(red, green, blue, yellow, orange, purple)
+  def initialize(white, gray, red, green, blue, yellow, orange, purple)
+    @white = white
+    @gray = gray
     @red = red
     @green = green
     @blue = blue
@@ -21,16 +24,20 @@ class String
     "\e[#{color_code}m#{self}\e[0m"
   end
 
+  def gray
+    colorize(90)
+  end
+
   def red
-    colorize(31)
+    colorize(91)
   end
 
   def green
-    colorize(32)
+    colorize(92)
   end
 
   def yellow
-    colorize(33)
+    colorize(93)
   end
 
   def blue
@@ -38,10 +45,15 @@ class String
   end
 
   def pink
-    colorize(35)
+    colorize(95)
   end
 
-  def light_blue
-    colorize(36)
+  def cyan
+    colorize(96)
+  end
+
+  def white
+    colorize(97)
   end
 end
+
