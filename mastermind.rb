@@ -1,19 +1,23 @@
-# frozen_string_literal: false
+# frozen_string_literal: true
+require 'debug'
+
+# Mastermind
+module Mastermind
+  def computer
+    array = ['red'.red, 'green'.green, 'blue'.blue, 'yellow'.yellow, 'cyan'.cyan, 'pink'.pink].sample(4)
+    puts "computer choice is #{array[0]} #{array[1]} #{array[2]} #{array[3]}"
+  end
+end
 
 # Board game
 class Board
   attr_accessor :red, :green, :blue, :yelow,
                 :orange, :purple, :white, :gray
 
-  def initialize(white, gray, red, green, blue, yellow, orange, purple)
+  include Mastermind
+
+  def initialize(white)
     @white = white
-    @gray = gray
-    @red = red
-    @green = green
-    @blue = blue
-    @yellow = yellow
-    @orange = orange
-    @purple = purple
   end
 end
 
@@ -57,3 +61,7 @@ class String
   end
 end
 
+binding.break
+
+player = Board.
+Board.computer
