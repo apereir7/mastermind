@@ -4,9 +4,26 @@ require 'debug'
 # Mastermind
 module Mastermind
   def computer
-    array = ['red'.red, 'green'.green, 'blue'.blue, 'yellow'.yellow, 'cyan'.cyan, 'pink'.pink].sample(4)
-    puts "computer choice is #{array[0]} #{array[1]} #{array[2]} #{array[3]}"
+    array = ['red'.red, 'green'.green, 'purple'.purple, 'yellow'.yellow, 'cyan'.cyan, 'pink'.pink].sample(4)
+    puts "The computer's choice is [ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
   end
+
+  def convert_to_color(string)
+    if string =='red'
+      string.red
+    elsif string == 'green'
+      string.green
+    elsif string == 'cyan'
+      string.cyan
+    elsif string == 'purple'
+      string.purple
+    elsif string == 'yellow'
+      string.yellow
+    else string == 'pink'
+      string.pink
+    end
+  end
+
 end
 
 # Board game
@@ -15,6 +32,25 @@ class Board
                 :orange, :purple, :white, :gray
 
   include Mastermind
+
+  @@pick = ['hello']
+
+  def display_pick(array)
+    puts 'You picked'
+    puts "[ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
+  end
+
+  def pick
+    puts 'Pick a color'
+    @@pick[0] = convert_to_color(gets.chomp)
+    puts 'Pick a color'
+    @@pick[1] = convert_to_color(gets.chomp)
+    puts 'Pick a color'
+    @@pick[2] = convert_to_color(gets.chomp)
+    puts 'Pick a color'
+    @@pick[3] = convert_to_color(gets.chomp)
+    display_pick(@@pick)
+  end
 
   def initialize(white)
     @white = white
@@ -44,7 +80,7 @@ class String
     colorize(93)
   end
 
-  def blue
+  def purple
     colorize(34)
   end
 
@@ -61,7 +97,10 @@ class String
   end
 end
 
-binding.break
 
-player = Board.
-Board.computer
+
+player = Board.new('white')
+
+player.computer
+
+player.pick
