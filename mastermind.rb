@@ -9,21 +9,17 @@ module Mastermind
   end
 
   def convert_to_color(string)
-    if string =='red'
-      string.red
-    elsif string == 'green'
-      string.green
-    elsif string == 'cyan'
-      string.cyan
-    elsif string == 'purple'
-      string.purple
-    elsif string == 'yellow'
-      string.yellow
-    else string == 'pink'
-      string.pink
+    case string
+    when 'red', 'green'
+      string == 'red' ? string.red : string.green
+    when 'cyan', 'purple'
+      string == 'cyan' ? string.cyan : string.purple
+    when 'yellow', 'pink'
+      string == 'yellow' ? string.yellow : string.pink
+    else
+      'Not a valid color'
     end
   end
-
 end
 
 # Board game
@@ -102,5 +98,4 @@ end
 player = Board.new('white')
 
 player.computer
-
 player.pick
