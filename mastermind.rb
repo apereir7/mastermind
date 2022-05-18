@@ -4,7 +4,7 @@ require 'debug'
 # Mastermind
 module Mastermind
   def computer
-    array = ['red'.red, 'green'.green, 'purple'.purple, 'yellow'.yellow, 'cyan'.cyan, 'pink'.pink].sample(4)
+    array = ['red'.red, 'green'.green, 'blue'.blue, 'yellow'.yellow, 'cyan'.cyan, 'pink'.pink].sample(4)
     puts "The computer's choice is [ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
   end
 
@@ -12,27 +12,38 @@ module Mastermind
     case string
     when 'red', 'green'
       string == 'red' ? string.red : string.green
-    when 'cyan', 'purple'
-      string == 'cyan' ? string.cyan : string.purple
+    when 'cyan', 'blue'
+      string == 'cyan' ? string.cyan : string.blue
     when 'yellow', 'pink'
       string == 'yellow' ? string.yellow : string.pink
     else
       'Not a valid color'
     end
   end
+
+  def pick(array)
+    puts 'Pick a color'
+    array[0] = convert_to_color(gets.chomp)
+    puts 'Pick a color'
+    array[1] = convert_to_color(gets.chomp)
+    puts 'Pick a color'
+    array[2] = convert_to_color(gets.chomp)
+    puts 'Pick a color'
+    array[3] = convert_to_color(gets.chomp)
+    display_pick(array)
+  end
 end
 
 # Board game
 class Board
-  attr_accessor :red, :green, :blue, :yelow,
-                :orange, :purple, :white, :gray
+  attr_accessor 
 
   include Mastermind
 
-  @@pick = ['hello']
+  @@array = ['hello']
 
   def initialize
-    @@pick
+    @@array
   end
 
   def display_pick(array)
@@ -40,26 +51,8 @@ class Board
     puts "[ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
   end
 
-  def pick
-    puts 'Pick a color'
-    @@pick[0] = convert_to_color(gets.chomp)
-    puts 'Pick a color'
-    @@pick[1] = convert_to_color(gets.chomp)
-    puts 'Pick a color'
-    @@pick[2] = convert_to_color(gets.chomp)
-    puts 'Pick a color'
-    @@pick[3] = convert_to_color(gets.chomp)
-    display_pick(@@pick)
-  end
-
-   
-  
-
-
-
-
-  def class_variable
-    puts @@pick 
+  def array
+    @@array
   end
 end
 
@@ -86,7 +79,7 @@ class String
     colorize(93)
   end
 
-  def purple
+  def blue
     colorize(34)
   end
 
@@ -106,4 +99,7 @@ end
 player = Board.new
 
 player.computer
-player.class_variable
+puts " show default player value #{player.array}"
+
+player.pick(player.array)
+
