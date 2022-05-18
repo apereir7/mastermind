@@ -52,6 +52,7 @@ class Board
     display_pick(@@pick)
   end
 
+   
   
   def class_variable
     @@pick
