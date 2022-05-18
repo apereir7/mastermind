@@ -31,6 +31,10 @@ class Board
 
   @@pick = ['hello']
 
+  def initialize
+    @@pick
+  end
+
   def display_pick(array)
     puts 'You picked'
     puts "[ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
@@ -48,8 +52,8 @@ class Board
     display_pick(@@pick)
   end
 
-  def initialize(white)
-    @white = white
+  def class_variable
+    @@pick
   end
 end
 
@@ -93,9 +97,7 @@ class String
   end
 end
 
-
-
-player = Board.new('white')
+player = Board.new
 
 player.computer
-player.pick
+player.class_variable
