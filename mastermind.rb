@@ -59,7 +59,7 @@ class Board
 
   
   def class_variable
-    @@pick
+    p @@pick
   end
 end
 
