@@ -22,14 +22,12 @@ module Mastermind
   end
 
   def pick(array)
-    puts 'Pick a color'
-    array[0] = convert_to_color(gets.chomp)
-    puts 'Pick a color'
-    array[1] = convert_to_color(gets.chomp)
-    puts 'Pick a color'
-    array[2] = convert_to_color(gets.chomp)
-    puts 'Pick a color'
-    array[3] = convert_to_color(gets.chomp)
+    array.each_with_index do |color, index|
+      unless index > 3
+        puts 'Pick a color'
+        array[index] = convert_to_color(gets.chomp)
+      end
+    end
     display_pick(array)
   end
 end
@@ -40,7 +38,7 @@ class Board
 
   include Mastermind
 
-  @@array = ['hello']
+  @@array = [0, 1, 2, 3]
 
   def initialize
     @@array
