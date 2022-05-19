@@ -1,10 +1,13 @@
-# frozen_string_literal: true
 require 'debug'
 
 # Mastermind
 module Mastermind
-  def computer
-    array = ['red'.red, 'green'.green, 'blue'.blue, 'yellow'.yellow, 'cyan'.cyan, 'pink'.pink].sample(4)
+  def computer_choice(array)
+    array.each_with_index do |element, index|
+      unless index > 3
+        array[element] = ['red'.red, 'green'.green, 'blue'.blue, 'yellow'.yellow, 'cyan'.cyan, 'pink'.pink].sample
+      end
+    end
     puts "The computer's choice is [ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
   end
 
@@ -25,10 +28,19 @@ module Mastermind
     array.each_with_index do |color, index|
       unless index > 3
         puts 'Pick a color'
-        array[index] = convert_to_color(gets.chomp)
+        array[color] = convert_to_color(gets.chomp)
       end
     end
     display_pick(array)
+  end
+
+  def display_pick(array)
+    puts 'You picked'
+    puts "[ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
+  end
+
+  def play(array)
+    
   end
 end
 
@@ -39,10 +51,7 @@ class Board
   include Mastermind
 
   @@array = [0, 1, 2, 3]
-
-  def initialize
-    @@array
-  end
+  @@computer = [0, 1, 2, 3]
 
   def display_pick(array)
     puts 'You picked'
@@ -51,6 +60,10 @@ class Board
 
   def array
     @@array
+  end
+
+  def computer
+    @@computer
   end
 end
 
@@ -96,8 +109,6 @@ end
 
 player = Board.new
 
-player.computer
-puts " show default player value #{player.array}"
+player.computer_choice(player.computer)
 
 player.pick(player.array)
-
