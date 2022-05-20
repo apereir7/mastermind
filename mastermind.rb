@@ -9,6 +9,7 @@ module Mastermind
       end
     end
     puts "The computer's choice is [ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
+    array
   end
 
   def convert_to_color(string)
@@ -24,24 +25,35 @@ module Mastermind
     end
   end
 
-  def pick(array)
+  def players_choice(array)
     array.each_with_index do |color, index|
       unless index > 3
         puts 'Pick a color'
         array[color] = convert_to_color(gets.chomp)
       end
     end
-    display_pick(array)
+    puts "You picked [ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
+    array
   end
 
-  def display_pick(array)
-    puts 'You picked'
+  def display_choice(array)
     puts "[ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
   end
 
-  def play(array)
-    
-  end
+  def play(array1, array2)
+    array1.map.with_index do |element, index|
+      if element == array2[index] # check if element in the right spot & place
+        array2[index] = nil
+        'Right color and right slot'
+      elsif array2.index(element) # check if element is in the right color, but wrong spot
+        array2[array2.index(element)] = nil
+        'Right color BUT wrong slot'
+      else # If color doesn't exist in chooser's array
+        array2[index] = nil
+        'Wrong color'.gray
+      end
+    end
+  end.sample(4)
 end
 
 # Board game
@@ -52,11 +64,6 @@ class Board
 
   @@array = [0, 1, 2, 3]
   @@computer = [0, 1, 2, 3]
-
-  def display_pick(array)
-    puts 'You picked'
-    puts "[ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
-  end
 
   def array
     @@array
@@ -111,4 +118,7 @@ player = Board.new
 
 player.computer_choice(player.computer)
 
-player.pick(player.array)
+player.players_choice(player.array)
+
+player.play(player.array, player.computer)
+
