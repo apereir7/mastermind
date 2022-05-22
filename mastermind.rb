@@ -3,12 +3,12 @@ require 'debug'
 # Mastermind
 module Mastermind
   def computer_choice(array)
-    array.each_with_index do |element, index|
+    array.map.with_index do |_element, index|
       unless index > 3
-        array[element] = ['red'.red, 'green'.green, 'blue'.blue, 'yellow'.yellow, 'cyan'.cyan, 'pink'.pink].sample
+        array[index] = ['red'.red, 'green'.green, 'blue'.blue, 'yellow'.yellow, 'cyan'.cyan, 'pink'.pink].sample
       end
     end
-    puts "The computer's choice is [ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
+    puts "Computer's choice is [ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
     array
   end
 
@@ -26,10 +26,10 @@ module Mastermind
   end
 
   def players_choice(array)
-    array.each_with_index do |color, index|
+    array.map.with_index do |_color, index|
       unless index > 3
         puts 'Pick a color'
-        array[color] = convert_to_color(gets.chomp)
+        array[index] = convert_to_color(gets.chomp)
       end
     end
     puts "You picked [ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
@@ -41,50 +41,28 @@ module Mastermind
   end
 
   def play(code_breaker, code_maker, hint_array)
-    code_breaker.map.with_index do |element, index|
-      if code_breaker[index] == code_maker[index] # check if element in the right spot & place
-        code_maker[index] = nil
-        hint_array.push('Right color AND right slot')
-      elsif code_maker.index(element) # check if element is in the right color, but wrong spot
-        code_maker[code_maker.index(element)] = nil # check for first element with specified color
-        hint_array.push('Right color BUT wrong slot')
-      else # If color doesn't exist in chooser's array
-        code_maker[index] = nil
-        hint_array.push('Wrong color')
-      end
-    end
+    code_maker1 = code_maker
+    one_2_one(code_breaker, code_maker1, hint_array)
+    puts "hellow"
   end
 
-  def color_slot_change(code_breaker, code_maker, index, element, hint_array)
-    if code_breaker[index] == code_maker[index]
-      code_maker[index] = nil
-      hint_array.push('Right color AND right slot')
-    elsif code_maker.index(element)
-      code_maker[code_maker.index(element)] = nil # check for first element with specified color
-      hint_array.push('Right color BUT wrong slot')
-    else
-      code_maker[index] = nil
-      hint_array.push('Wrong color')
+  def one_2_one(code_breaker, code_maker, hint_array)
+    code_maker.each_with_index do |_, index|
+      if code_breaker[index] == code_maker[index]
+        code_maker[index] = nil
+        hint_array.push('Right color AND right slot')
+      end
     end
   end
 end
 
 # Board game
 class Board
-  attr_accessor 
+  attr_accessor :array
 
   include Mastermind
-
-  @@array = [0, 1, 2, 3]
-  @@computer = [0, 1, 2, 3]
-  @@hint_array = []
-
-  def array
-    @@array
-  end
-
-  def computer
-    @@computer
+  def initialize(array = [1, 2, 3, 4])
+    @array = array
   end
 
   def hint_array
@@ -133,11 +111,12 @@ class String
 end
 
 player = Board.new
+computer = Board.new
 
-player.computer_choice(player.computer)
+computers_choice = computer.computer_choice(computer.array)
 
-player.players_choice(player.array)
+players_choice = player.players_choice(player.array)
 
-player.play(player.array, player.computer, player.hint_array)
+#player.play(player.array, player.computer, player.hint_array)
 
-puts 'hello'
+puts "hello"
