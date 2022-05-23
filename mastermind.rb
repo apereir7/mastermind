@@ -36,37 +36,52 @@ module Mastermind
     array
   end
 
-  def display_choice(array)
-    puts "[ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
+  def play_round(code_breaker, code_maker, hint_array)
+    right_slot(code_breaker, code_maker, hint_array)
+    right_color(code_breaker, code_maker, hint_array)
   end
 
-  def play(code_breaker, code_maker, hint_array)
-    code_maker1 = code_maker
-    one_2_one(code_breaker, code_maker1, hint_array)
-    puts "hellow"
-  end
-
-  def one_2_one(code_breaker, code_maker, hint_array)
-    code_maker.each_with_index do |_, index|
+  def right_slot(code_breaker, code_maker, hint_array)
+    code_maker.map.with_index do |_, index|
       if code_breaker[index] == code_maker[index]
         code_maker[index] = nil
-        hint_array.push('Right color AND right slot')
+        code_breaker[index] = nil
+        hint_array[index] = 'Right color AND right slot'
       end
     end
   end
+
+  def right_color(code_breaker, code_maker, hint_array)
+    code_breaker.map.with_index do |element, index|
+      next if element.nil?
+
+      if code_maker.index(element) # check if element is in the right color, but wrong spot
+        code_maker[code_maker.index(element)] = nil # check for first element with specified color
+        code_breaker[index] = nil
+        hint_array[index] = 'Right color BUT wrong slot'
+      else # If color doesn't exist in chooser's array
+        wrong_color(index, code_breaker, code_maker, hint_array)
+      end
+    end
+  end
+
+  def wrong_color(index, code_breaker, code_maker, hint_array)
+    code_breaker[index] = nil
+    hint_array[index] = 'Wrong color'
+  end
+
+
 end
 
 # Board game
 class Board
-  attr_accessor :array
+  attr_accessor :array, :hint_array, :round
 
   include Mastermind
-  def initialize(array = [1, 2, 3, 4])
+  def initialize(round = 1, array = [1, 2, 3, 4], hint_array = [1, 2, 3, 4])
     @array = array
-  end
-
-  def hint_array
-    @@hint_array
+    @hint_array = hint_array
+    @round = round
   end
 end
 
@@ -117,6 +132,7 @@ computers_choice = computer.computer_choice(computer.array)
 
 players_choice = player.players_choice(player.array)
 
-#player.play(player.array, player.computer, player.hint_array)
+hint_array = player.hint_array
 
-puts "hello"
+player.play_round(computers_choice, players_choice, hint_array)
+
