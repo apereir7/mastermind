@@ -25,7 +25,7 @@ module Mastermind
     end
   end
 
-  def players_choice(array)
+  def pick_colors(array)
     array.map.with_index do |_color, index|
       unless index > 3
         puts 'Pick a color'
@@ -36,7 +36,7 @@ module Mastermind
     array
   end
 
-  def play_round(code_breaker, code_maker, hint_array)
+  def check_round(code_breaker, code_maker, hint_array)
     right_slot(code_breaker, code_maker, hint_array)
     right_color(code_breaker, code_maker, hint_array)
   end
@@ -65,12 +65,25 @@ module Mastermind
     end
   end
 
-  def wrong_color(index, code_breaker, code_maker, hint_array)
+  def wrong_color(index, code_breaker, _code_maker, hint_array)
     code_breaker[index] = nil
     hint_array[index] = 'Wrong color'
   end
 
+  def play_game(code_breaker, code_maker, hint_array, round)
+    check_round(code_breaker, code_maker, hint_array)
+    if hint_array.all? { |color| color == hint_array[0] } || round > 13
+      hint_array.all? { |color| color == hint_array[0] } ? message('Congratulations! You win!') : message('Sorry. You lose')
+    else
+      check_round(code_breaker, code_maker, hint_array)
+      round += 1
+      play_game(player.play_game, code_maker, hint_array, round)
+    end
+  end
 
+  def message(message)
+    puts message
+  end
 end
 
 # Board game
@@ -130,9 +143,10 @@ computer = Board.new
 
 computers_choice = computer.computer_choice(computer.array)
 
-players_choice = player.players_choice(player.array)
+players_choice = player.pick_colors(player.array)
 
 hint_array = player.hint_array
 
-player.play_round(computers_choice, players_choice, hint_array)
+player.play_game(computers_choice, players_choice, hint_array, player.round)
+
 
