@@ -46,7 +46,6 @@ module Mastermind
   end
 
   def invalid_color(array)
-    puts "You picked [ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
     if !array.include?('Not a valid color')
       array
     else
@@ -55,10 +54,13 @@ module Mastermind
     end
   end
 
-  def check_round(code_breaker, code_maker, hint_array)
+  def check_round(code_breaker, code_maker, hint_array, round)
+    puts "\n Round #{round} "
+    puts "You picked [ #{code_breaker[0]} #{code_breaker[1]} #{code_breaker[2]} #{code_breaker[3]} ]"
     right_slot(code_breaker, code_maker, hint_array)
     right_color(code_breaker, code_maker, hint_array)
     shuffle_array(hint_array)
+    puts "\n"
   end
 
   def right_slot(code_breaker, code_maker, hint_array)
@@ -91,9 +93,9 @@ module Mastermind
   end
 
   def play_game(code_breaker, code_maker, hint_array, round)
-    puts "#{'Round'.white} #{round += 1}"
+    round += 1
     code_maker1 = first_step(code_maker)
-    check_round(code_breaker, code_maker1, hint_array)
+    check_round(code_breaker, code_maker1, hint_array, round)
     if hint_array.all? { |color| color == 'Right color AND right slot' } || round > 13
       hint_array.all? { |color| color == 'Right color AND right slot' } ? message('Congratulations! You win!') : message('Sorry. You lose')
     else
@@ -121,7 +123,7 @@ module Mastermind
     push_array(array, array2) # returns array2
     array3 = array2.shuffle
     puts "#{'Hint array'.red} : [#{colorize(array3[0])}, #{colorize(array3[1])}, #{colorize(array3[2])},
-     #{colorize(array3[3])}]"
+     #{colorize(array3[3])}] \n"
   end
 end
 
