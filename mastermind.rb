@@ -77,7 +77,7 @@ module Mastermind
       hint_array.all? { |color| color == hint_array[0] } ? message('Congratulations! You win!') : message('Sorry. You lose')
     else
       check_round(code_breaker, code_maker1, hint_array)
-      p hint_array
+      p hint_array.sample(4)
       play_game(pick_colors(array), code_maker, hint_array, round)
     end
   end
@@ -154,7 +154,10 @@ player = Board.new
 computer = Board.new
 
 computers_choice = computer.computer_choice(computer.array)
-
+p 'You are the codebreaker. '
+p 'The PC is the codemaker.'
+p 'You have 12 guesses to crack the code'
+p 'A hint array will be displayed in no particular order'
 players_choice = player.pick_colors(player.array)
 
 hint_array = player.hint_array
