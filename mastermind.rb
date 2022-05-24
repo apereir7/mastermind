@@ -24,20 +24,41 @@ module Mastermind
     end
   end
 
+  def colorize(string)
+    case string
+    when 'Right color AND right slot'
+      string.red
+    when 'Right color BUT wrong slot'
+      string.yellow
+    else
+      string.gray
+    end
+  end
+
   def pick_colors(array)
     array.map.with_index do |_color, index|
       unless index > 3
-        puts 'Pick a color'
-        array[index] = convert_to_color(gets.chomp)
+        puts "Pick color #{index + 1}"
+        array[index] = convert_to_color(gets.downcase.chomp)
       end
     end
+    invalid_color(array)
+  end
+
+  def invalid_color(array)
     puts "You picked [ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
-    array
+    if !array.include?('Not a valid color')
+      array
+    else
+      puts 'You picked an invalid color. Choose your colors again'
+      pick_colors(array)
+    end
   end
 
   def check_round(code_breaker, code_maker, hint_array)
     right_slot(code_breaker, code_maker, hint_array)
     right_color(code_breaker, code_maker, hint_array)
+    shuffle_array(hint_array)
   end
 
   def right_slot(code_breaker, code_maker, hint_array)
@@ -70,14 +91,12 @@ module Mastermind
   end
 
   def play_game(code_breaker, code_maker, hint_array, round)
-    round += 1
+    puts "#{'Round'.white} #{round += 1}"
     code_maker1 = first_step(code_maker)
     check_round(code_breaker, code_maker1, hint_array)
-    if hint_array.all? { |color| color == hint_array[0] } || round > 13
-      hint_array.all? { |color| color == hint_array[0] } ? message('Congratulations! You win!') : message('Sorry. You lose')
+    if hint_array.all? { |color| color == 'Right color AND right slot' } || round > 13
+      hint_array.all? { |color| color == 'Right color AND right slot' } ? message('Congratulations! You win!') : message('Sorry. You lose')
     else
-      check_round(code_breaker, code_maker1, hint_array)
-      p hint_array.sample(4)
       play_game(pick_colors(array), code_maker, hint_array, round)
     end
   end
@@ -86,15 +105,23 @@ module Mastermind
     puts message
   end
 
-  def manipulate_array(array1, array2)
+  def push_array(array1, array2)
     array1.map do |color|
       array2.push(color)
     end
   end
 
   def first_step(array, array1 = [])
-    manipulate_array(array, array1)
+    push_array(array, array1)
     array1
+  end
+
+  def shuffle_array(array)
+    array2 = []
+    push_array(array, array2) # returns array2
+    array3 = array2.shuffle
+    puts "#{'Hint array'.red} : [#{colorize(array3[0])}, #{colorize(array3[1])}, #{colorize(array3[2])},
+     #{colorize(array3[3])}]"
   end
 end
 
@@ -158,10 +185,19 @@ p 'You are the codebreaker. '
 p 'The PC is the codemaker.'
 p 'You have 12 guesses to crack the code'
 p 'A hint array will be displayed in no particular order'
+p 'The color choices are :'
+puts 'Red'.red
+puts 'Yellow'.yellow
+puts 'Green'.green
+puts 'Blue'.blue
+puts 'Pink'.pink
+puts 'Cyan'.cyan
 players_choice = player.pick_colors(player.array)
 
 hint_array = player.hint_array
 
 player.play_game(players_choice, computers_choice, hint_array, 0)
+
+
 
 
