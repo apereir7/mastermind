@@ -8,7 +8,6 @@ module Mastermind
         array[index] = ['red'.red, 'green'.green, 'blue'.blue, 'yellow'.yellow, 'cyan'.cyan, 'pink'.pink].sample
       end
     end
-    puts "Computer's choice is [ #{array[0]} #{array[1]} #{array[2]} #{array[3]} ]"
     array
   end
 
@@ -71,18 +70,31 @@ module Mastermind
   end
 
   def play_game(code_breaker, code_maker, hint_array, round)
-    check_round(code_breaker, code_maker, hint_array)
+    round += 1
+    code_maker1 = first_step(code_maker)
+    check_round(code_breaker, code_maker1, hint_array)
     if hint_array.all? { |color| color == hint_array[0] } || round > 13
       hint_array.all? { |color| color == hint_array[0] } ? message('Congratulations! You win!') : message('Sorry. You lose')
     else
-      check_round(code_breaker, code_maker, hint_array)
-      round += 1
-      play_game(player.play_game, code_maker, hint_array, round)
+      check_round(code_breaker, code_maker1, hint_array)
+      p hint_array
+      play_game(pick_colors(array), code_maker, hint_array, round)
     end
   end
 
   def message(message)
     puts message
+  end
+
+  def manipulate_array(array1, array2)
+    array1.map do |color|
+      array2.push(color)
+    end
+  end
+
+  def first_step(array, array1 = [])
+    manipulate_array(array, array1)
+    array1
   end
 end
 
@@ -91,7 +103,7 @@ class Board
   attr_accessor :array, :hint_array, :round
 
   include Mastermind
-  def initialize(round = 1, array = [1, 2, 3, 4], hint_array = [1, 2, 3, 4])
+  def initialize(array = [1, 2, 3, 4], hint_array = [1, 2, 3, 4])
     @array = array
     @hint_array = hint_array
     @round = round
@@ -147,6 +159,6 @@ players_choice = player.pick_colors(player.array)
 
 hint_array = player.hint_array
 
-player.play_game(computers_choice, players_choice, hint_array, player.round)
+player.play_game(players_choice, computers_choice, hint_array, 0)
 
 
